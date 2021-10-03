@@ -20,17 +20,38 @@ $(document).ready(function () {
       $(this).parent().fadeOut(500, function () {
          $(this).remove();
       });
+
+        todotext = $(this).parent().text();
+        todos = localStorage.getItem("todos");
+        todos = JSON.parse(todos);
+        todos.pop(todotext);
+        localStorage.setItem("todos", JSON.stringify(todos));
+
       event.stopPropagation();
    });
 });
 
 //add
 $(document).ready(function () {
+
+    todos = localStorage.getItem("todos");
+    todos = JSON.parse(todos);
+    if (todos != null) {
+        for (var i = 0; i < todos.length; i++) {
+            $("ul").append("<li><span><i class='fa fa-trash'></i></span> " + todos[i] + "</li>");
+        }
+    }
+
    $("input[type='text'").keypress(function (event) {
       if (event.which === 13) {
          var todotext = ($(this).val());
          $(this).val("");
          $("ul").append("<li class='list-item'><span><i class='fas fa-trash-alt'></i></span> <strong>" + todotext + "</strong> </li>")
+
+        todos = localStorage.getItem("todos");
+        todos = JSON.parse(todos);
+        todos.push(todotext);
+        localStorage.setItem("todos", JSON.stringify(todos));
       }
    });
    $(".fa-calendar-plus").on("click", function () {
